@@ -43,6 +43,7 @@ function* logoutHandler() {
   try {
     yield call(userService.logoutUser);
     localStorage.removeItem("access_token");
+    yield put(setUser(null));
   } catch (error) {
     console.log(error);
   }

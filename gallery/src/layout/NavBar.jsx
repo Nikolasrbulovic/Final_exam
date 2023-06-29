@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { performUserLogOut } from "../store/user/slice";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { selectUser } from "../store/user/selectors";
 const NavBar = () => {
+  const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const logoutHandler = () => {
     dispatch(performUserLogOut());
@@ -24,28 +27,32 @@ const NavBar = () => {
                   </div>
                 </a>
               </li>
-              <li>
-                <a href="#" className="nav-link text-center text-white">
-                  <div className="d-flex flex-column align-items-center">
-                    <i
-                      className="bi bi-image"
-                      style={{ fontSize: "1.7rem" }}
-                    ></i>
-                    <span className="d-block">My Gallery</span>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="#" className="nav-link text-center text-white">
-                  <div className="d-flex flex-column align-items-center">
-                    <i
-                      className="bi bi-image"
-                      style={{ fontSize: "1.7rem" }}
-                    ></i>
-                    <span className="d-block">Create Gallery</span>
-                  </div>
-                </a>
-              </li>
+              {user && (
+                <>
+                  <li>
+                    <a href="#" className="nav-link text-center text-white">
+                      <div className="d-flex flex-column align-items-center">
+                        <i
+                          className="bi bi-image"
+                          style={{ fontSize: "1.7rem" }}
+                        ></i>
+                        <span className="d-block">My Gallery</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="nav-link text-center text-white">
+                      <div className="d-flex flex-column align-items-center">
+                        <i
+                          className="bi bi-image"
+                          style={{ fontSize: "1.7rem" }}
+                        ></i>
+                        <span className="d-block">Create Gallery</span>
+                      </div>
+                    </a>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
           <div className="text-end">
@@ -60,13 +67,15 @@ const NavBar = () => {
               </button>
             </a>
 
-            <button
-              type="button"
-              className="btn btn-light text-dark me-2"
-              onClick={logoutHandler}
-            >
-              Logout
-            </button>
+            {user && (
+              <button
+                type="button"
+                className="btn btn-light text-dark me-2"
+                onClick={logoutHandler}
+              >
+                Logout
+              </button>
+            )}
           </div>
         </div>
       </div>
