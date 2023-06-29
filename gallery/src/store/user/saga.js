@@ -1,0 +1,55 @@
+import { call, put, takeLatest } from "redux-saga/effects";
+import { userService } from "../../service/AuthService";
+import {
+  performUserLogOut,
+  performUserLogin,
+  performUserRegister,
+  setUser,
+  userRegisterFailure,
+} from "./slice";
+
+function* loginHandler(action) {
+  console.log(action.payload);
+  try {
+    const { email, password } = action.payload;
+    const { data } = yield call(userService.loginUser, email, password);
+
+    const userData = data.user;
+    localStorage.setItem("access_token", data.authorisation.token);
+    yield put(setUser(userData));
+  } catch (error) {
+    console.log(error);
+  }
+}
+function* registerHandler(action) {
+  try {
+    const { first_name, last_name, email, password, password_confirmation } =
+      action.payload;
+    const { data } = yield call(
+      userService.registerUser,
+      first_name,
+      last_name,
+      email,
+      password,
+      password_confirmation
+    );
+    localStorage.setItem("access_token", data.authorisation.token);
+  } catch (error) {
+    yield put(userRegisterFailure(error.response.data.message));
+  }
+}
+
+function* logoutHandler() {
+  try {
+    yield call(userService.logoutUser);
+    localStorage.removeItem("access_token");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function* watchUsers() {
+  yield takeLatest(performUserLogin.type, loginHandler);
+  yield takeLatest(performUserRegister.type, registerHandler);
+  yield takeLatest(performUserLogOut.type, logoutHandler);
+}
