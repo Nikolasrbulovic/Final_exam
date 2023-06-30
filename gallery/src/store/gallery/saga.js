@@ -1,6 +1,11 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { galleryService } from "../../service/GalleryService";
-import { setGalleries, setLastPage } from "./slice";
+import {
+  performCreateGallery,
+  setGalleries,
+  setGalleryError,
+  setLastPage,
+} from "./slice";
 import { performGetAllGalleries } from "./slice";
 function* getAllgalleries({ payload }) {
   try {
@@ -16,7 +21,24 @@ function* getAllgalleries({ payload }) {
     console.log(error);
   }
 }
+function* createGallery(action) {
+  try {
+    const { name, description, image_urls, user_id } = action.payload;
+
+    yield call(
+      galleryService.createGallery,
+      name,
+      description,
+      image_urls,
+      user_id
+    );
+  } catch (error) {
+    console.log(error.response.statusText);
+    yield put(setGalleryError(error.response.statusText));
+  }
+}
 
 export function* watchGalleries() {
   yield takeLatest(performGetAllGalleries.type, getAllgalleries);
+  yield takeLatest(performCreateGallery.type, createGallery);
 }

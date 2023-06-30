@@ -26,4 +26,13 @@ export const galleryService = {
       return data;
     }
   },
+  createGallery: async (name, description, image_urls, user_id) => {
+    const data = API.post("/create", {
+      name,
+      description,
+      image_urls,
+      user_id,
+    });
+    return data;
+  },
 };

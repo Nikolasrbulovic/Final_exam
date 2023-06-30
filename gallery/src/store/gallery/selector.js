@@ -4,3 +4,6 @@ export const selectAllGalleries = (state) => {
 export const selectLastPage = (state) => {
   return state.gallery.lastPage;
 };
+export const selectGalleryErrorMessage = (state) => {
+  return state.gallery.error;
+};

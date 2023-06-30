@@ -6,7 +6,6 @@ import { selectAllGalleries } from "../store/gallery/selector";
 import SingleGallery from "../components/SingleGallery";
 import { selectLastPage } from "../store/gallery/selector";
 import { useState } from "react";
-import { current } from "@reduxjs/toolkit";
 
 const MyGalleries = () => {
   const [nextPage, setNextPage] = useState(2);
@@ -14,13 +13,10 @@ const MyGalleries = () => {
 
   useEffect(() => {
     dispatch(performGetAllGalleries());
-    console.log(galleries);
   }, []);
   const galleries = useSelector(selectAllGalleries);
 
   const lastPage = useSelector(selectLastPage);
-  console.log(lastPage, "last");
-  console.log(nextPage, "current");
 
   const loadMoreHandler = () => {
     if (nextPage <= lastPage) {
