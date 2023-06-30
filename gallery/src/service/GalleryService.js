@@ -1,9 +1,5 @@
 import { API } from "../shared/api";
 
-export const getGalleries = () => {
-  return API.get("/");
-};
-
 export const getGallery = (id) => {
   return API.get(`/galleries/${id}`);
 };
@@ -18,4 +14,16 @@ export const editGallery = (id, name, description, image_urls = []) => {
 
 export const deleteGallery = (id) => {
   return API.delete(`${id}`);
+};
+
+export const galleryService = {
+  getGalleries: async (page) => {
+    if (!page) {
+      const data = await API.get("/");
+      return data;
+    } else {
+      const data = await API.get(`?page=${page}`);
+      return data;
+    }
+  },
 };

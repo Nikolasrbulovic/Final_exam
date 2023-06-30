@@ -9,7 +9,7 @@ const middlewareActions = {
 const userSlice = createSlice({
   name: "users",
   initialState: {
-    user: {},
+    user: null,
     error: "",
   },
 

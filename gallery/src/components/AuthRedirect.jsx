@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useState } from "react";
-const ProtectedRoute = ({ children }) => {
-  const [isAuth, setIsAuth] = useState(true);
+
+const AuthRedirect = ({ children }) => {
+  const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
+    console.log(token);
     if (token) {
       setIsAuth(true);
     } else {
@@ -14,9 +16,9 @@ const ProtectedRoute = ({ children }) => {
   }, []);
 
   if (isAuth) {
-    return <>{children}</>;
+    return <Navigate to={"/"}></Navigate>;
   }
-  return <Navigate to={"/"}></Navigate>;
-};
 
-export default ProtectedRoute;
+  return <>{children}</>;
+};
+export default AuthRedirect;

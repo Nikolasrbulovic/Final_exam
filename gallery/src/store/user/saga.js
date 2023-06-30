@@ -1,5 +1,6 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { userService } from "../../service/AuthService";
+
 import {
   performUserLogOut,
   performUserLogin,
@@ -9,13 +10,13 @@ import {
 } from "./slice";
 
 function* loginHandler(action) {
-  console.log(action.payload);
   try {
     const { email, password } = action.payload;
     const { data } = yield call(userService.loginUser, email, password);
 
     const userData = data.user;
     localStorage.setItem("access_token", data.authorisation.token);
+
     yield put(setUser(userData));
   } catch (error) {
     console.log(error);
@@ -41,7 +42,7 @@ function* registerHandler(action) {
 
 function* logoutHandler() {
   try {
-    yield call(userService.logoutUser);
+    //yield call(userService.logoutUser);
     localStorage.removeItem("access_token");
     yield put(setUser(null));
   } catch (error) {
