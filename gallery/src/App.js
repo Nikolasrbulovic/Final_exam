@@ -8,7 +8,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AllGalleries from "./pages/AllGalleries";
 import CreateGallery from "./components/CreateGallery";
 import { useEffect } from "react";
-
+import MyGalleries from "./pages/MyGalleries";
+import EditGallery from "./components/EditGallery";
 function App() {
   // useEffect(() => {}, []);
   return (
@@ -44,6 +45,22 @@ function App() {
           element={
             <ProtectedRoute>
               <CreateGallery />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-galleries"
+          element={
+            <ProtectedRoute>
+              <MyGalleries />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-gallery/:id"
+          element={
+            <ProtectedRoute>
+              <EditGallery />
             </ProtectedRoute>
           }
         />

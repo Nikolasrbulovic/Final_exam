@@ -15,6 +15,7 @@ const MyGalleries = () => {
     dispatch(performGetAllGalleries());
   }, []);
   const galleries = useSelector(selectAllGalleries);
+  console.log(galleries);
 
   const lastPage = useSelector(selectLastPage);
 

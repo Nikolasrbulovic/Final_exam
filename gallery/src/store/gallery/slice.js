@@ -3,6 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const middlewareActions = {
   performGetAllGalleries: () => {},
   performCreateGallery: () => {},
+  performGetMyGalleries: () => {},
+  perforomGetGalleryById: () => {},
+  perforomUpdateGallery: () => {},
 };
 const gallerySlice = createSlice({
   name: "gallery",
@@ -10,6 +13,8 @@ const gallerySlice = createSlice({
     galleries: [],
     lastPage: 1,
     error: "",
+    myGalleries: [],
+    galleryById: {},
   },
   reducers: {
     ...middlewareActions,
@@ -22,6 +27,12 @@ const gallerySlice = createSlice({
     setGalleryError: (state, action) => {
       state.error = action.payload;
     },
+    setMyGalleries: (state, action) => {
+      state.myGalleries.push(...action.payload);
+    },
+    setGalleryById: (state, action) => {
+      state.galleryById = action.payload;
+    },
   },
 });
 
@@ -31,6 +42,11 @@ export const {
   setLastPage,
   performCreateGallery,
   setGalleryError,
+  setMyGalleries,
+  performGetMyGalleries,
+  perforomGetGalleryById,
+  perforomUpdateGallery,
+  setGalleryById,
 } = gallerySlice.actions;
 
 export default gallerySlice.reducer;

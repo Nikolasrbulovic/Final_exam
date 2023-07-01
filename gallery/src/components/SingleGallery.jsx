@@ -1,4 +1,8 @@
+import { useSelector } from "react-redux";
+import { selectUser } from "../store/user/selectors";
+import { Link } from "react-router-dom";
 const SingleGallery = ({ gallery }) => {
+  const user = useSelector(selectUser);
   const date = new Date(gallery.created_at);
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
@@ -6,6 +10,7 @@ const SingleGallery = ({ gallery }) => {
   const formattedDate = `${year}-${month}-${day}`;
   const userFirstName = gallery.user.first_name;
   const userLastName = gallery.user.last_name;
+  const userId = gallery.user.id;
   return (
     <div className="col">
       <div className="card shadow-sm">
@@ -24,12 +29,15 @@ const SingleGallery = ({ gallery }) => {
               >
                 View
               </button>
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-secondary"
-              >
-                Edit
-              </button>
+              {user.id == userId && (
+                <Link
+                  to={`/edit-gallery/${gallery.id}`}
+                  type="button"
+                  className="btn btn-sm btn-outline-secondary"
+                >
+                  Edit
+                </Link>
+              )}
             </div>
             <small className="text-body-secondary">{formattedDate}</small>
           </div>

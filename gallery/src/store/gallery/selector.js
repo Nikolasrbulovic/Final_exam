@@ -7,3 +7,9 @@ export const selectLastPage = (state) => {
 export const selectGalleryErrorMessage = (state) => {
   return state.gallery.error;
 };
+export const selectMyGalleries = (state) => {
+  return state.gallery.myGalleries;
+};
+export const selectGalleryById = (state) => {
+  return state.gallery.galleryById;
+};

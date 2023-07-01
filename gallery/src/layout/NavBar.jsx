@@ -35,7 +35,7 @@ const NavBar = () => {
                 <>
                   <li>
                     <Link
-                      href="/my-galleries"
+                      to="/my-galleries"
                       className="nav-link text-center text-white"
                     >
                       <div className="d-flex flex-column align-items-center">

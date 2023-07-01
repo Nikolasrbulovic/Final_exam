@@ -1,23 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
-import { selectUserId } from "../store/user/selectors";
+import { useParams } from "react-router-dom";
+
 import { useDispatch } from "react-redux";
-import { performCreateGallery } from "../store/gallery/slice";
+import {
+  performCreateGallery,
+  perforomGetGalleryById,
+  perforomUpdateGallery,
+} from "../store/gallery/slice";
 import {
   selectGalleryById,
   selectGalleryErrorMessage,
 } from "../store/gallery/selector";
-import { useNavigate } from "react-router-dom";
 
-const CreateGallery = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+const EditGallery = () => {
+  const { id } = useParams();
   const gallery = useSelector(selectGalleryById);
-  console.log(gallery);
+  console.log(gallery, "asdad");
+  const dispatch = useDispatch();
   const error = useSelector(selectGalleryErrorMessage);
   const [urls, setUrls] = useState([""]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  useEffect(() => {
+    dispatch(perforomGetGalleryById(id));
+  }, []);
+
+  useEffect(() => {
+    if (gallery) {
+      setUrls(gallery.image_urls);
+      setName(gallery.name);
+      setDescription(gallery.description);
+    }
+  }, [gallery]);
 
   const handleUrlChange = (index, e) => {
     const updatedUrls = [...urls];
@@ -39,7 +54,7 @@ const CreateGallery = () => {
     e.preventDefault();
     const image_urls = urls;
 
-    dispatch(performCreateGallery({ name, description, image_urls }));
+    dispatch(perforomUpdateGallery({ id, name, description, image_urls }));
     setName("");
     setDescription("");
     setUrls([""]);
@@ -52,7 +67,7 @@ const CreateGallery = () => {
             type="text"
             className="form-control"
             name="name"
-            value={name}
+            defaultValue={gallery.name}
             onChange={(e) => handleNameInput(e)}
           />
           <label>Gallery Name</label>
@@ -61,16 +76,17 @@ const CreateGallery = () => {
           <textarea
             className="w-100 from-control "
             style={{ height: "100px" }}
+            defaultValue={gallery.description}
             value={description}
             onChange={(e) => handleDescriptionInput(e)}
           ></textarea>
         </div>
-        {urls.map((url, index) => (
+        {urls?.map((url, index) => (
           <div className="form-floating mb-2" key={index}>
             <input
               type="text"
               className="form-control"
-              value={url}
+              defaultValue={url}
               onChange={(e) => handleUrlChange(index, e)}
             />
             <label> Image url : {index + 1}</label>
@@ -93,4 +109,4 @@ const CreateGallery = () => {
   );
 };
 
-export default CreateGallery;
+export default EditGallery;

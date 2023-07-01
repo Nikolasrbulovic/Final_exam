@@ -1,21 +1,5 @@
 import { API } from "../shared/api";
 
-export const getGallery = (id) => {
-  return API.get(`/galleries/${id}`);
-};
-
-export const createGallery = (name, description, image_urls = []) => {
-  return API.post("/create", { name, description, image_urls });
-};
-
-export const editGallery = (id, name, description, image_urls = []) => {
-  return API.post(`/edit-galery/${id}`, { name, description, image_urls });
-};
-
-export const deleteGallery = (id) => {
-  return API.delete(`${id}`);
-};
-
 export const galleryService = {
   getGalleries: async (page) => {
     if (!page) {
@@ -26,12 +10,28 @@ export const galleryService = {
       return data;
     }
   },
-  createGallery: async (name, description, image_urls, user_id) => {
+  createGallery: async (name, description, image_urls) => {
     const data = API.post("/create", {
       name,
       description,
       image_urls,
-      user_id,
+    });
+    return data;
+  },
+  getMyGalleries: async () => {
+    const data = API.get("/my-galleries");
+    return data;
+  },
+  getGalleryById: async (id) => {
+    const data = API.get(`/galleries/${id}`);
+    return data;
+  },
+  updateGalleryById: async (id, name, description, image_urls) => {
+    const data = API.put(`/edit-gallery/${id}`, {
+      id,
+      name,
+      description,
+      image_urls,
     });
     return data;
   },
