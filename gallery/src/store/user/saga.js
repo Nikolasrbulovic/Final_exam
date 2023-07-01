@@ -11,9 +11,9 @@ import {
 
 function* loginHandler(action) {
   try {
-    const { email, password } = action.payload;
+    const { email, password, onSuccess } = action.payload;
     const { data } = yield call(userService.loginUser, email, password);
-
+    onSuccess();
     const userData = data.user;
     localStorage.setItem("access_token", data.authorisation.token);
 

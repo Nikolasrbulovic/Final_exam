@@ -1,16 +1,23 @@
 import { performUserLogin } from "../store/user/slice";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { redirect } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
+  console.log(navigate, "xx");
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(performUserLogin({ email, password }));
+    dispatch(
+      performUserLogin({
+        email,
+        password,
+        onSuccess: () => navigate("/"),
+      })
+    );
     setEmail("");
     setPassword("");
   };

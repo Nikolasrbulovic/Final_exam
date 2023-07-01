@@ -13,3 +13,10 @@ export const selectMyGalleries = (state) => {
 export const selectGalleryById = (state) => {
   return state.gallery.galleryById;
 };
+
+export const selectLoadingGalleryById = (state) => {
+  return state.gallery.loadingGalleryById;
+};
+export const selectLastPageMyGallery = (state) => {
+  return state.gallery.lastPageMyGallery;
+};

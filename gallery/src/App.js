@@ -10,6 +10,7 @@ import CreateGallery from "./components/CreateGallery";
 import { useEffect } from "react";
 import MyGalleries from "./pages/MyGalleries";
 import EditGallery from "./components/EditGallery";
+import ViewGallery from "./pages/ViewGallery";
 function App() {
   // useEffect(() => {}, []);
   return (
@@ -39,7 +40,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/create"
           element={
@@ -61,6 +61,14 @@ function App() {
           element={
             <ProtectedRoute>
               <EditGallery />
+            </ProtectedRoute>
+          }
+        />{" "}
+        <Route
+          path="/galleries/:id"
+          element={
+            <ProtectedRoute>
+              <ViewGallery />
             </ProtectedRoute>
           }
         />

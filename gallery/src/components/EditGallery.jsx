@@ -11,12 +11,13 @@ import {
 import {
   selectGalleryById,
   selectGalleryErrorMessage,
+  selectLoadingGalleryById,
 } from "../store/gallery/selector";
 
 const EditGallery = () => {
   const { id } = useParams();
   const gallery = useSelector(selectGalleryById);
-  console.log(gallery, "asdad");
+  const loadingGallery = useSelector(selectLoadingGalleryById);
   const dispatch = useDispatch();
   const error = useSelector(selectGalleryErrorMessage);
   const [urls, setUrls] = useState([""]);
@@ -55,10 +56,15 @@ const EditGallery = () => {
     const image_urls = urls;
 
     dispatch(perforomUpdateGallery({ id, name, description, image_urls }));
-    setName("");
-    setDescription("");
-    setUrls([""]);
   };
+
+  if (loadingGallery) {
+    return (
+      <div className="d-flex flex-row justify-content-center mt-5">
+        <div class="spinner-border w-full text-center" role="status" />
+      </div>
+    );
+  }
   return (
     <div className="form-signin w-50 m-auto mt-5">
       <form onSubmit={submitHandler}>

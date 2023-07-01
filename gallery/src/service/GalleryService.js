@@ -1,12 +1,14 @@
 import { API } from "../shared/api";
 
 export const galleryService = {
-  getGalleries: async (page) => {
-    if (!page) {
+  getGalleries: async (payload) => {
+    if (!payload?.page) {
       const data = await API.get("/");
       return data;
     } else {
-      const data = await API.get(`?page=${page}`);
+      const data = await API.get(
+        `?page=${payload.page}&searchTerm=${payload.searchTerm}`
+      );
       return data;
     }
   },
@@ -18,8 +20,10 @@ export const galleryService = {
     });
     return data;
   },
-  getMyGalleries: async () => {
-    const data = API.get("/my-galleries");
+  getMyGalleries: async (payload) => {
+    const searchTerm = payload?.searchTerm ?? "";
+    const page = payload?.page ?? 1;
+    const data = API.get(`/my-galleries?page=${page}&searchTerm=${searchTerm}`);
     return data;
   },
   getGalleryById: async (id) => {
@@ -33,6 +37,10 @@ export const galleryService = {
       description,
       image_urls,
     });
+    return data;
+  },
+  deleteGallery: async (id) => {
+    const data = API.delete(`${id}`);
     return data;
   },
 };
