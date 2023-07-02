@@ -3,6 +3,7 @@ import { galleryService } from "../../service/GalleryService";
 import {
   performCreateGallery,
   performGetMyGalleries,
+  performGetUserWithGalleries,
   performDeleteGallery,
   setLastPageMyGallery,
   perforomGetGalleryById,
@@ -13,8 +14,11 @@ import {
   setLastPage,
   setMyGalleries,
   setLoadingGalleryById,
+  clearUserGalleries,
   clearGalleries,
   clearMyGalleries,
+  setLastPageAuthors,
+  setUserGalleries,
 } from "./slice";
 import { performGetAllGalleries } from "./slice";
 
@@ -63,6 +67,7 @@ function* updateGallery(action) {
 }
 function* getMyGalleries(action) {
   try {
+    console.log(action, "asdad");
     const { data } = yield call(galleryService.getMyGalleries, action.payload);
     console.log(data);
     if (action.payload?.shouldClearGalleries) {
@@ -94,6 +99,23 @@ function* deleteGalleryById(action) {
     console.log(error);
   }
 }
+function* getUserGalleries(action) {
+  try {
+    console.log(action);
+    const { data } = yield call(
+      galleryService.getUserWithGalleries,
+      action.payload
+    );
+    if (action.payload?.shouldClearGalleries) {
+      yield put(clearUserGalleries(data.data));
+    }
+    yield put(setLastPageAuthors(data.last_page));
+    yield put(setUserGalleries(data.data));
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export function* watchGalleries() {
   yield takeLatest(performGetAllGalleries.type, getAllgalleries);
@@ -102,4 +124,5 @@ export function* watchGalleries() {
   yield takeLatest(perforomGetGalleryById.type, getGalleryById);
   yield takeLatest(perforomUpdateGallery.type, updateGallery);
   yield takeLatest(performDeleteGallery.type, deleteGalleryById);
+  yield takeLatest(performGetUserWithGalleries.type, getUserGalleries);
 }

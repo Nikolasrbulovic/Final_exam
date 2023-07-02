@@ -7,6 +7,7 @@ const middlewareActions = {
   perforomGetGalleryById: () => {},
   perforomUpdateGallery: () => {},
   performDeleteGallery: () => {},
+  performGetUserWithGalleries: () => {},
 };
 const gallerySlice = createSlice({
   name: "gallery",
@@ -14,10 +15,12 @@ const gallerySlice = createSlice({
     galleries: [],
     lastPage: 1,
     lastPageMyGallery: 1,
+    lastPageAuthors: 1,
     error: "",
     myGalleries: [],
     galleryById: {},
     loadingGalleryById: false,
+    userGalleries: [],
   },
   reducers: {
     ...middlewareActions,
@@ -27,6 +30,9 @@ const gallerySlice = createSlice({
     clearGalleries: (state) => {
       state.galleries = [];
     },
+    clearUserGalleries: (state) => {
+      state.userGalleries = [];
+    },
     setLoadingGalleryById: (state, action) => {
       state.loadingGalleryById = action.payload;
     },
@@ -35,6 +41,9 @@ const gallerySlice = createSlice({
     },
     setLastPageMyGallery: (state, action) => {
       state.lastPageMyGallery = action.payload;
+    },
+    setLastPageAuthors: (state, action) => {
+      state.lastPageAuthors = action.payload;
     },
     setGalleryError: (state, action) => {
       state.error = action.payload;
@@ -48,23 +57,30 @@ const gallerySlice = createSlice({
     setGalleryById: (state, action) => {
       state.galleryById = action.payload;
     },
+    setUserGalleries: (state, action) => {
+      state.userGalleries.push(...action.payload);
+    },
   },
 });
 
 export const {
   performGetAllGalleries,
-  setGalleries,
-  clearGalleries,
-  setLastPage,
   performCreateGallery,
-  setGalleryError,
-  setMyGalleries,
   performGetMyGalleries,
+  performGetUserWithGalleries,
   performDeleteGallery,
-  setLastPageMyGallery,
-  clearMyGalleries,
   perforomGetGalleryById,
   perforomUpdateGallery,
+  setUserGalleries,
+  setLastPageAuthors,
+  setGalleries,
+  clearUserGalleries,
+  clearGalleries,
+  setLastPage,
+  setGalleryError,
+  setMyGalleries,
+  setLastPageMyGallery,
+  clearMyGalleries,
   setGalleryById,
   setLoadingGalleryById,
 } = gallerySlice.actions;

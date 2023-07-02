@@ -43,4 +43,16 @@ export const galleryService = {
     const data = API.delete(`${id}`);
     return data;
   },
+  getUserWithGalleries: async (payload) => {
+    const searchTerm = payload?.searchTerm ?? "";
+    const page = payload?.page ?? 1;
+    if (!payload?.page) {
+      const data = await API.get(`/authors/${payload}`);
+      return data;
+    }
+    const data = API.get(
+      `/authors/${payload.id}/?page=${page}&searchTerm=${searchTerm}`
+    );
+    return data;
+  },
 };

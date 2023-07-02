@@ -20,3 +20,10 @@ export const selectLoadingGalleryById = (state) => {
 export const selectLastPageMyGallery = (state) => {
   return state.gallery.lastPageMyGallery;
 };
+
+export const selectUserGalleries = (state) => {
+  return state.gallery.userGalleries;
+};
+export const selectLastPageAuthors = (state) => {
+  return state.gallery.lastPageAuthors;
+};

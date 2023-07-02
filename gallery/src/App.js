@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import MyGalleries from "./pages/MyGalleries";
 import EditGallery from "./components/EditGallery";
 import ViewGallery from "./pages/ViewGallery";
+import AuthorsPage from "./pages/AuthorsPage";
 function App() {
   // useEffect(() => {}, []);
   return (
@@ -69,6 +70,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ViewGallery />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/authors/:id"
+          element={
+            <ProtectedRoute>
+              <AuthorsPage />
             </ProtectedRoute>
           }
         />

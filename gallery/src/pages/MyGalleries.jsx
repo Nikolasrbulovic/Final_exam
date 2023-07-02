@@ -18,7 +18,7 @@ const MyGalleries = () => {
     dispatch(performGetMyGalleries());
   }, []);
   const galleries = useSelector(selectMyGalleries);
-  console.log(galleries);
+
   const filter = () => {
     dispatch(
       performGetMyGalleries({

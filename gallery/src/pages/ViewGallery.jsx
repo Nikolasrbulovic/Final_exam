@@ -4,10 +4,9 @@ import {
   performDeleteGallery,
   perforomGetGalleryById,
 } from "../store/gallery/slice";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectGalleryById } from "../store/gallery/selector";
-import { selectUser } from "../store/user/selectors";
 import useLoggedUser from "../hooks/useLoggedUser";
 
 const ViewGallery = () => {
@@ -22,19 +21,20 @@ const ViewGallery = () => {
   const deleteGalleryHandler = () => {
     dispatch(performDeleteGallery(id));
   };
-  console.log(userId, gallery.user?.id);
+
   return (
     <div>
       <div className="d-flex flex-row justify-content-center">
         <div>
           <p>Gallery Name: {gallery.name}</p>
           <p>Gallery description: {gallery.description}</p>
+          <Link to={`/authors/${gallery.user?.id}`}>
+            <p>
+              Authors name:{" "}
+              {gallery.user?.first_name + " " + gallery.user?.last_name}
+            </p>
+          </Link>
         </div>
-        {userId === gallery.user?.id.toString() && (
-          <button className="btn btn-primary" onClick={deleteGalleryHandler}>
-            delete
-          </button>
-        )}
       </div>
       <div className="d-flex flex-row justify-content-center">
         <div
@@ -75,6 +75,16 @@ const ViewGallery = () => {
             <span class="visually-hidden">Next</span>
           </button>
         </div>
+      </div>
+      <div className="d-flex flex-row justify-content-center">
+        {userId === gallery.user?.id.toString() && (
+          <button
+            className="btn btn-primary justify-content-center"
+            onClick={deleteGalleryHandler}
+          >
+            delete
+          </button>
+        )}
       </div>
     </div>
   );
