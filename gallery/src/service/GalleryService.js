@@ -55,4 +55,8 @@ export const galleryService = {
     );
     return data;
   },
+  createComment: async (payload) => {
+    const data = API.post("storecomment", payload);
+    return data;
+  },
 };

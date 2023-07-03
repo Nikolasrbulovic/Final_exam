@@ -8,26 +8,39 @@ import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectGalleryById } from "../store/gallery/selector";
 import useLoggedUser from "../hooks/useLoggedUser";
+import Comments from "../components/Comments";
+import Modal from "../components/Modal";
+import { useNavigate } from "react-router-dom";
 
 const ViewGallery = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
   const gallery = useSelector(selectGalleryById);
+  console.log(gallery);
+
   const userId = useLoggedUser();
 
   useEffect(() => {
     dispatch(perforomGetGalleryById(id));
   }, []);
   const deleteGalleryHandler = () => {
-    dispatch(performDeleteGallery(id));
+    dispatch(
+      performDeleteGallery({ onSuccess: () => navigate("/my-galleries"), id })
+    );
   };
 
   return (
     <div>
+      <Modal deleteGallery={deleteGalleryHandler}></Modal>
       <div className="d-flex flex-row justify-content-center">
         <div>
-          <p>Gallery Name: {gallery.name}</p>
-          <p>Gallery description: {gallery.description}</p>
+          <p>
+            <strong>Gallery Name:</strong> {gallery.name}
+          </p>
+          <p>
+            <strong>Gallery description:</strong> {gallery.description}
+          </p>
           <Link to={`/authors/${gallery.user?.id}`}>
             <p>
               Authors name:{" "}
@@ -76,15 +89,19 @@ const ViewGallery = () => {
           </button>
         </div>
       </div>
-      <div className="d-flex flex-row justify-content-center">
+      <div className="d-flex flex-row justify-content-center mt-3">
         {userId === gallery.user?.id.toString() && (
           <button
-            className="btn btn-primary justify-content-center"
-            onClick={deleteGalleryHandler}
+            className="btn btn-danger justify-content-center"
+            data-bs-toggle="modal"
+            data-bs-target="#modal"
           >
-            delete
+            Delete Gallery
           </button>
         )}
+      </div>
+      <div>
+        <Comments gallery={gallery} galleryId={gallery.id}></Comments>
       </div>
     </div>
   );

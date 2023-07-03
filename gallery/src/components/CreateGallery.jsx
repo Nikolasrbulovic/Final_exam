@@ -7,7 +7,7 @@ import {
   selectGalleryById,
   selectGalleryErrorMessage,
 } from "../store/gallery/selector";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CreateGallery = () => {
   const navigate = useNavigate();
@@ -39,7 +39,14 @@ const CreateGallery = () => {
     e.preventDefault();
     const image_urls = urls;
 
-    dispatch(performCreateGallery({ name, description, image_urls }));
+    dispatch(
+      performCreateGallery({
+        name,
+        description,
+        image_urls,
+        onSuccess: () => navigate("/my-galleries"),
+      })
+    );
     setName("");
     setDescription("");
     setUrls([""]);
@@ -47,7 +54,7 @@ const CreateGallery = () => {
   return (
     <div className="form-signin w-50 m-auto mt-5">
       <form onSubmit={submitHandler}>
-        <div className="form-floating mb-2">
+        <div className="form-floating mb-4">
           <input
             type="text"
             className="form-control"
@@ -57,16 +64,17 @@ const CreateGallery = () => {
           />
           <label>Gallery Name</label>
         </div>
-        <div className="form-floating mb-2">
+        <div className="form-floating mb-4">
           <textarea
             className="w-100 from-control "
-            style={{ height: "100px" }}
+            style={{ height: "100px", resize: "none" }}
             value={description}
             onChange={(e) => handleDescriptionInput(e)}
           ></textarea>
+          <label> Gallery description </label>
         </div>
         {urls.map((url, index) => (
-          <div className="form-floating mb-2" key={index}>
+          <div className="form-floating mb-4 " key={index}>
             <input
               type="text"
               className="form-control"
@@ -76,17 +84,25 @@ const CreateGallery = () => {
             <label> Image url : {index + 1}</label>
           </div>
         ))}
-
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={handleAddUrlInput}
-        >
-          Add URL
-        </button>
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
+        <div className="d-flex flex-row justify-content-between">
+          <button
+            type="button"
+            className="btn btn-outline-dark"
+            onClick={handleAddUrlInput}
+          >
+            Add URL
+          </button>
+          <div className="d-flex gap-2">
+            <button type="submit" className="btn btn-outline-success">
+              Submit
+            </button>
+            <Link to={"/my-galleries"}>
+              <button type="button" className="btn btn-outline-danger">
+                Cancel
+              </button>
+            </Link>
+          </div>
+        </div>
       </form>
       {error && <p className="error-message">{error}</p>}
     </div>

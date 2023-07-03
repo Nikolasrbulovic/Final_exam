@@ -8,6 +8,7 @@ const middlewareActions = {
   perforomUpdateGallery: () => {},
   performDeleteGallery: () => {},
   performGetUserWithGalleries: () => {},
+  performCreateComment: () => {},
 };
 const gallerySlice = createSlice({
   name: "gallery",
@@ -17,15 +18,25 @@ const gallerySlice = createSlice({
     lastPageMyGallery: 1,
     lastPageAuthors: 1,
     error: "",
-    myGalleries: [],
+    myGalleries: null,
     galleryById: {},
     loadingGalleryById: false,
     userGalleries: [],
+    comments: [],
   },
   reducers: {
     ...middlewareActions,
     setGalleries: (state, action) => {
       state.galleries.push(...action.payload);
+    },
+    deleteGallery: (state, action) => {
+      console.log(action.payload, "xx");
+      state.galleries = state.galleries.filter(
+        (gallery) => gallery.id.toString() !== action.payload.toString()
+      );
+      state.myGalleries = state.myGalleries.filter(
+        (gallery) => gallery.id.toString() !== action.payload.toString()
+      );
     },
     clearGalleries: (state) => {
       state.galleries = [];
@@ -49,6 +60,10 @@ const gallerySlice = createSlice({
       state.error = action.payload;
     },
     setMyGalleries: (state, action) => {
+      if (!state.myGalleries) {
+        state.myGalleries = [...action.payload];
+        return;
+      }
       state.myGalleries.push(...action.payload);
     },
     clearMyGalleries: (state) => {
@@ -60,6 +75,13 @@ const gallerySlice = createSlice({
     setUserGalleries: (state, action) => {
       state.userGalleries.push(...action.payload);
     },
+    setComments: (state, action) => {
+      state.galleryById.comments.push(action.payload);
+      // state.comments.push(action.payload);
+    },
+    clearComments: (state, action) => {
+      state.comments = [];
+    },
   },
 });
 
@@ -69,8 +91,10 @@ export const {
   performGetMyGalleries,
   performGetUserWithGalleries,
   performDeleteGallery,
+  deleteGallery,
   perforomGetGalleryById,
   perforomUpdateGallery,
+  performCreateComment,
   setUserGalleries,
   setLastPageAuthors,
   setGalleries,
@@ -78,11 +102,13 @@ export const {
   clearGalleries,
   setLastPage,
   setGalleryError,
+  setComments,
   setMyGalleries,
   setLastPageMyGallery,
   clearMyGalleries,
   setGalleryById,
   setLoadingGalleryById,
+  clearComments,
 } = gallerySlice.actions;
 
 export default gallerySlice.reducer;

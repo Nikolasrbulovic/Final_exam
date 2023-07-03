@@ -42,23 +42,26 @@ const MyGalleries = () => {
   };
   return (
     <div>
-      <div className="d-flex justify-content-center my-3">
+      <div className="d-flex justify-content-center gap-3 my-3">
         <input
+          className="form-control w-25"
           type="text"
           name="search"
           placeholder="Search..."
           value={searchTerm}
           onChange={(e) => handleSearchTermChange(e.target.value)}
         />
-        <button onClick={() => filter()}>Filter</button>
+        <button className="btn btn-outline-dark" onClick={() => filter()}>
+          Filter
+        </button>
       </div>
-      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3 mx-3">
         {galleries.map((gallery) => {
           return <SingleGallery gallery={gallery}></SingleGallery>;
         })}
       </div>
       {nextPage <= lastPage && (
-        <div className="d-flex flex-row justify-content-center my-5">
+        <div className="d-flex flex-row justify-content-center my-5 ">
           <button onClick={loadMoreHandler}>Load More</button>
         </div>
       )}

@@ -2,19 +2,17 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../store/user/selectors";
 import { Link } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import useFormattedDate from "../hooks/useFormattedDate";
 
 const SingleGallery = ({ gallery }) => {
-  const date = new Date(gallery.created_at);
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const formattedDate = `${year}-${month}-${day}`;
+  const formattedDate = useFormattedDate(gallery.created_at);
+
   const userFirstName = gallery.user.first_name;
   const userLastName = gallery.user.last_name;
   const userId = gallery.user?.id;
 
   const loggedUserId = jwt_decode(localStorage.getItem("access_token")).sub;
-  console.log(loggedUserId, "xx", userId);
+
   return (
     <div className="col">
       <div className="card shadow-sm">

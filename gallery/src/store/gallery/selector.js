@@ -27,3 +27,6 @@ export const selectUserGalleries = (state) => {
 export const selectLastPageAuthors = (state) => {
   return state.gallery.lastPageAuthors;
 };
+export const selectComments = (state) => {
+  return state.gallery.comments;
+};

@@ -37,7 +37,7 @@ const AuthorsPage = () => {
     );
     setNextPage(2);
   };
-  console.log(galleries);
+
   return (
     <div>
       <div>

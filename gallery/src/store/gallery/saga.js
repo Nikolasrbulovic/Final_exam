@@ -7,6 +7,7 @@ import {
   performDeleteGallery,
   setLastPageMyGallery,
   perforomGetGalleryById,
+  performCreateComment,
   setGalleries,
   setGalleryById,
   setGalleryError,
@@ -19,6 +20,9 @@ import {
   clearMyGalleries,
   setLastPageAuthors,
   setUserGalleries,
+  setComments,
+  clearComments,
+  deleteGallery,
 } from "./slice";
 import { performGetAllGalleries } from "./slice";
 
@@ -41,9 +45,10 @@ function* getAllgalleries({ payload }) {
 }
 function* createGallery(action) {
   try {
-    const { name, description, image_urls } = action.payload;
+    const { name, description, image_urls, onSuccess } = action.payload;
 
     yield call(galleryService.createGallery, name, description, image_urls);
+    onSuccess();
   } catch (error) {
     console.log(error.response.statusText);
     yield put(setGalleryError(error.response.statusText));
@@ -93,7 +98,14 @@ function* getGalleryById(action) {
 }
 function* deleteGalleryById(action) {
   try {
-    const { data } = yield call(galleryService.deleteGallery, action.payload);
+    const { onSuccess } = action.payload;
+    const { data } = yield call(
+      galleryService.deleteGallery,
+      action.payload.id
+    );
+    yield put(deleteGallery(action.payload.id));
+    onSuccess();
+
     return data;
   } catch (error) {
     console.log(error);
@@ -116,6 +128,19 @@ function* getUserGalleries(action) {
     console.log(error);
   }
 }
+function* createComment(action) {
+  try {
+    yield put(clearComments());
+    const { data } = yield call(galleryService.createComment, action.payload);
+
+    if (data) {
+      yield put(setComments(data.comment));
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export function* watchGalleries() {
   yield takeLatest(performGetAllGalleries.type, getAllgalleries);
@@ -125,4 +150,5 @@ export function* watchGalleries() {
   yield takeLatest(perforomUpdateGallery.type, updateGallery);
   yield takeLatest(performDeleteGallery.type, deleteGalleryById);
   yield takeLatest(performGetUserWithGalleries.type, getUserGalleries);
+  yield takeLatest(performCreateComment.type, createComment);
 }
