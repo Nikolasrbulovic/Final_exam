@@ -71,7 +71,6 @@ const CreateGallery = () => {
             value={description}
             onChange={(e) => handleDescriptionInput(e)}
           ></textarea>
-          <label> Gallery description </label>
         </div>
         {urls.map((url, index) => (
           <div className="form-floating mb-4 " key={index}>

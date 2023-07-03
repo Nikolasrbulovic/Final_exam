@@ -8,27 +8,29 @@ import {
   setLastPageMyGallery,
   perforomGetGalleryById,
   performCreateComment,
+  performDeleteComment,
   setGalleries,
   setGalleryById,
   setGalleryError,
   perforomUpdateGallery,
   setLastPage,
   setMyGalleries,
-  setLoadingGalleryById,
+  updateMyGalleries,
+  setLoading,
   clearUserGalleries,
   clearGalleries,
   clearMyGalleries,
   setLastPageAuthors,
   setUserGalleries,
   setComments,
-  clearComments,
+  clearComment,
   deleteGallery,
 } from "./slice";
 import { performGetAllGalleries } from "./slice";
 
 function* getAllgalleries({ payload }) {
   try {
-    console.log(payload, "xx");
+    yield put(setLoading(true));
     const { data } = yield call(galleryService.getGalleries, payload);
 
     let galleries = data.data;
@@ -39,7 +41,9 @@ function* getAllgalleries({ payload }) {
     }
     yield put(setLastPage(lastPage));
     yield put(setGalleries(galleries));
+    yield put(setLoading(false));
   } catch (error) {
+    yield put(setLoading(false));
     console.log(error);
   }
 }
@@ -47,7 +51,14 @@ function* createGallery(action) {
   try {
     const { name, description, image_urls, onSuccess } = action.payload;
 
-    yield call(galleryService.createGallery, name, description, image_urls);
+    const { data } = yield call(
+      galleryService.createGallery,
+      name,
+      description,
+      image_urls
+    );
+    console.log(data, "xx");
+    yield put(setMyGalleries([data.gallery]));
     onSuccess();
   } catch (error) {
     console.log(error.response.statusText);
@@ -56,15 +67,18 @@ function* createGallery(action) {
 }
 function* updateGallery(action) {
   try {
-    const { id, name, description, image_urls } = action.payload;
+    const { id, name, description, image_urls, onSuccess } = action.payload;
 
-    yield call(
+    const { data } = yield call(
       galleryService.updateGalleryById,
       id,
       name,
       description,
       image_urls
     );
+
+    yield put(updateMyGalleries(data));
+    onSuccess();
   } catch (error) {
     console.log(error.response.statusText);
     yield put(setGalleryError(error.response.statusText));
@@ -72,26 +86,28 @@ function* updateGallery(action) {
 }
 function* getMyGalleries(action) {
   try {
-    console.log(action, "asdad");
+    yield put(setLoading(true));
     const { data } = yield call(galleryService.getMyGalleries, action.payload);
-    console.log(data);
+
     if (action.payload?.shouldClearGalleries) {
       yield put(clearMyGalleries(data.data));
     }
     yield put(setLastPageMyGallery(data.last_page));
     yield put(setMyGalleries(data.data));
+    yield put(setLoading(false));
   } catch (error) {
+    yield put(setLoading(false));
     console.log(error);
   }
 }
 function* getGalleryById(action) {
   try {
-    yield put(setLoadingGalleryById(true));
+    yield put(setLoading(true));
     const { data } = yield call(galleryService.getGalleryById, action.payload);
     yield put(setGalleryById(data));
-    yield put(setLoadingGalleryById(false));
+    yield put(setLoading(false));
   } catch (error) {
-    yield put(setLoadingGalleryById(false));
+    yield put(setLoading(false));
 
     console.log(error);
   }
@@ -113,29 +129,42 @@ function* deleteGalleryById(action) {
 }
 function* getUserGalleries(action) {
   try {
+    yield put(setLoading(true));
     console.log(action);
     const { data } = yield call(
       galleryService.getUserWithGalleries,
       action.payload
     );
+    console.log(data);
     if (action.payload?.shouldClearGalleries) {
       yield put(clearUserGalleries(data.data));
     }
     yield put(setLastPageAuthors(data.last_page));
     yield put(setUserGalleries(data.data));
+    yield put(setLoading(false));
     return data;
   } catch (error) {
+    yield put(setLoading(false));
     console.log(error);
   }
 }
 function* createComment(action) {
   try {
-    yield put(clearComments());
+    //yield put(clearComments());
     const { data } = yield call(galleryService.createComment, action.payload);
 
     if (data) {
       yield put(setComments(data.comment));
     }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+function* deleteComment(action) {
+  try {
+    const { data } = yield call(galleryService.deleteComment, action.payload);
+    yield put(clearComment(action.payload));
     return data;
   } catch (error) {
     console.log(error);
@@ -151,4 +180,5 @@ export function* watchGalleries() {
   yield takeLatest(performDeleteGallery.type, deleteGalleryById);
   yield takeLatest(performGetUserWithGalleries.type, getUserGalleries);
   yield takeLatest(performCreateComment.type, createComment);
+  yield takeLatest(performDeleteComment.type, deleteComment);
 }

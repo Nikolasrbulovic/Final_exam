@@ -10,15 +10,15 @@ const NavBar = () => {
   const dispatch = useDispatch();
   const logoutHandler = () => {
     dispatch(performUserLogOut());
-    navigate("/");
+    navigate("/login");
   };
 
   return (
     <div className="px-3 py-2 text-bg-dark border-bottom">
       <div className="container">
         <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <div className="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-            Gallery
+          <div className="d-flex align-items-center gap-2 my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+            <h1 class="display-4">Gallery </h1>
             <ul className="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
               <li>
                 <Link to="/" className="nav-link text-center text-white">

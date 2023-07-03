@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import {
-  performCreateGallery,
   perforomGetGalleryById,
   perforomUpdateGallery,
 } from "../store/gallery/slice";
 import {
   selectGalleryById,
   selectGalleryErrorMessage,
-  selectLoadingGalleryById,
+  selectLoading,
 } from "../store/gallery/selector";
 
 const EditGallery = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const gallery = useSelector(selectGalleryById);
-  const loadingGallery = useSelector(selectLoadingGalleryById);
+  const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
   const error = useSelector(selectGalleryErrorMessage);
   const [urls, setUrls] = useState([""]);
@@ -55,13 +55,21 @@ const EditGallery = () => {
     e.preventDefault();
     const image_urls = urls;
 
-    dispatch(perforomUpdateGallery({ id, name, description, image_urls }));
+    dispatch(
+      perforomUpdateGallery({
+        id,
+        name,
+        description,
+        image_urls,
+        onSuccess: () => navigate("/my-galleries"),
+      })
+    );
   };
 
-  if (loadingGallery) {
+  if (loading) {
     return (
       <div className="d-flex flex-row justify-content-center mt-5">
-        <div class="spinner-border w-full text-center" role="status" />
+        <div className="spinner-border w-full text-center" role="status" />
       </div>
     );
   }
@@ -99,16 +107,25 @@ const EditGallery = () => {
           </div>
         ))}
 
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={handleAddUrlInput}
-        >
-          Add URL
-        </button>
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
+        <div className="d-flex flex-row justify-content-between">
+          <button
+            type="button"
+            className="btn btn-outline-dark"
+            onClick={handleAddUrlInput}
+          >
+            Add URL
+          </button>
+          <div className="d-flex gap-2">
+            <button type="submit" className="btn btn-outline-success">
+              Submit
+            </button>
+            <Link to={"/my-galleries"}>
+              <button type="button" className="btn btn-outline-danger">
+                Cancel
+              </button>
+            </Link>
+          </div>
+        </div>
       </form>
       {error && <p className="error-message">{error}</p>}
     </div>

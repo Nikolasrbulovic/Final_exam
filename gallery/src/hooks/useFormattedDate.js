@@ -9,10 +9,6 @@ const useFormattedDate = (dateString) => {
       year: "numeric",
       month: "long",
       day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      timeZone: "UTC",
     };
 
     const formatted = dateObj.toLocaleString("en-US", options);

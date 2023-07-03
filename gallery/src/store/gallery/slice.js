@@ -9,6 +9,7 @@ const middlewareActions = {
   performDeleteGallery: () => {},
   performGetUserWithGalleries: () => {},
   performCreateComment: () => {},
+  performDeleteComment: () => {},
 };
 const gallerySlice = createSlice({
   name: "gallery",
@@ -20,7 +21,7 @@ const gallerySlice = createSlice({
     error: "",
     myGalleries: null,
     galleryById: {},
-    loadingGalleryById: false,
+    loading: false,
     userGalleries: [],
     comments: [],
   },
@@ -30,7 +31,6 @@ const gallerySlice = createSlice({
       state.galleries.push(...action.payload);
     },
     deleteGallery: (state, action) => {
-      console.log(action.payload, "xx");
       state.galleries = state.galleries.filter(
         (gallery) => gallery.id.toString() !== action.payload.toString()
       );
@@ -44,8 +44,8 @@ const gallerySlice = createSlice({
     clearUserGalleries: (state) => {
       state.userGalleries = [];
     },
-    setLoadingGalleryById: (state, action) => {
-      state.loadingGalleryById = action.payload;
+    setLoading: (state, action) => {
+      state.loading = action.payload;
     },
     setLastPage: (state, action) => {
       state.lastPage = action.payload;
@@ -60,11 +60,22 @@ const gallerySlice = createSlice({
       state.error = action.payload;
     },
     setMyGalleries: (state, action) => {
+      console.log(action.payload, "yy");
       if (!state.myGalleries) {
         state.myGalleries = [...action.payload];
         return;
       }
-      state.myGalleries.push(...action.payload);
+      //state.myGalleries.push(...action.payload);
+      state.myGalleries = [...action.payload, ...state.myGalleries];
+    },
+    updateMyGalleries: (state, action) => {
+      state.myGalleries = state.myGalleries.map((gallery, index) => {
+        if (gallery.id === action.payload.id) {
+          return action.payload;
+        } else {
+          return gallery;
+        }
+      });
     },
     clearMyGalleries: (state) => {
       state.myGalleries = [];
@@ -73,14 +84,22 @@ const gallerySlice = createSlice({
       state.galleryById = action.payload;
     },
     setUserGalleries: (state, action) => {
+      if (!state.userGalleries) {
+        state.userGalleries = [...action.payload];
+        return;
+      }
       state.userGalleries.push(...action.payload);
     },
     setComments: (state, action) => {
+      console.log(action);
       state.galleryById.comments.push(action.payload);
-      // state.comments.push(action.payload);
     },
-    clearComments: (state, action) => {
-      state.comments = [];
+    clearComment: (state, action) => {
+      const commentIdToRemove = action.payload;
+      state.galleryById.comments = state.galleryById.comments.filter(
+        (comment) => comment.id.toString() !== commentIdToRemove.toString()
+      );
+      console.log(state.galleryById.comments);
     },
   },
 });
@@ -91,8 +110,10 @@ export const {
   performGetMyGalleries,
   performGetUserWithGalleries,
   performDeleteGallery,
+  performDeleteComment,
   deleteGallery,
   perforomGetGalleryById,
+  updateMyGalleries,
   perforomUpdateGallery,
   performCreateComment,
   setUserGalleries,
@@ -107,8 +128,8 @@ export const {
   setLastPageMyGallery,
   clearMyGalleries,
   setGalleryById,
-  setLoadingGalleryById,
-  clearComments,
+  setLoading,
+  clearComment,
 } = gallerySlice.actions;
 
 export default gallerySlice.reducer;

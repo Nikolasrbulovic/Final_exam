@@ -33,14 +33,7 @@ function App() {
             </AuthRedirect>
           }
         />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <AllGalleries />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/" element={<AllGalleries />} />
         <Route
           path="/create"
           element={
@@ -64,23 +57,9 @@ function App() {
               <EditGallery />
             </ProtectedRoute>
           }
-        />{" "}
-        <Route
-          path="/galleries/:id"
-          element={
-            <ProtectedRoute>
-              <ViewGallery />
-            </ProtectedRoute>
-          }
         />
-        <Route
-          path="/authors/:id"
-          element={
-            <ProtectedRoute>
-              <AuthorsPage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/galleries/:id" element={<ViewGallery />} />
+        <Route path="/authors/:id" element={<AuthorsPage />} />
       </Routes>
     </div>
   );

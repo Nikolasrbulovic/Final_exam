@@ -14,8 +14,8 @@ export const selectGalleryById = (state) => {
   return state.gallery.galleryById;
 };
 
-export const selectLoadingGalleryById = (state) => {
-  return state.gallery.loadingGalleryById;
+export const selectLoading = (state) => {
+  return state.gallery.loading;
 };
 export const selectLastPageMyGallery = (state) => {
   return state.gallery.lastPageMyGallery;

@@ -1,8 +1,7 @@
-import { useSelector } from "react-redux";
-import { selectUser } from "../store/user/selectors";
 import { Link } from "react-router-dom";
-import jwt_decode from "jwt-decode";
+
 import useFormattedDate from "../hooks/useFormattedDate";
+import useLoggedUser from "../hooks/useLoggedUser";
 
 const SingleGallery = ({ gallery }) => {
   const formattedDate = useFormattedDate(gallery.created_at);
@@ -11,19 +10,19 @@ const SingleGallery = ({ gallery }) => {
   const userLastName = gallery.user.last_name;
   const userId = gallery.user?.id;
 
-  const loggedUserId = jwt_decode(localStorage.getItem("access_token")).sub;
+  const loggedUserId = useLoggedUser();
 
   return (
     <div className="col">
       <div className="card shadow-sm">
         <title>Placeholder</title>
         <img width="100%" height="225" src={gallery.image_urls[0]}></img>
-        <p className="card-text">name: {gallery.name}</p>
+        <p className="card-text m-3">Gallery Name: {gallery.name}</p>
         <div className="card-body">
           <p className="card-text">
             Gallery created by: {userFirstName + " " + userLastName}
           </p>
-          <div className="d-flex justify-content-between align-items-center">
+          <div className="d-flex justify-content-between gap-4 align-items-center">
             <div className="btn-group">
               <Link
                 type="button"

@@ -59,4 +59,8 @@ export const galleryService = {
     const data = API.post("storecomment", payload);
     return data;
   },
+  deleteComment: async (payload) => {
+    const data = API.delete(`/deletecomment/${payload}`);
+    return data;
+  },
 };

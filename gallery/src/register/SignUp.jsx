@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { performUserRegister } from "../store/user/slice";
-import { UseSelector, useSelector } from "react-redux/es/hooks/useSelector";
+import { useSelector } from "react-redux/es/hooks/useSelector";
 import { selectErrorMessage } from "../store/user/selectors";
+import { validateRegisterForm } from "../validation/validation";
+import { useNavigate } from "react-router-dom";
 const SignUp = () => {
-  const error = useSelector(selectErrorMessage);
+  const requestError = useSelector(selectErrorMessage);
 
   const dispatch = useDispatch();
   const [terms, setTerms] = useState(false);
-  const [message, setMessage] = useState("");
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     first_name: "",
     last_name: "",
@@ -25,19 +28,29 @@ const SignUp = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!terms) {
-      setMessage("Please accept the terms to proceed with registration.");
+    const isFormValid = validateRegisterForm({
+      user,
+      terms,
+      setErrors,
+    });
+    if (isFormValid) {
+      dispatch(
+        performUserRegister({
+          ...user,
+          onSuccess: () => {
+            navigate("/");
+            setUser({
+              first_name: "",
+              last_name: "",
+              email: "",
+              password: "",
+              password_confirmation: "",
+            });
+          },
+        })
+      );
     } else {
-      dispatch(performUserRegister(user));
-
-      setUser({
-        first_name: "",
-        last_name: "",
-        email: "",
-        password: "",
-        password_confirmation: "",
-      });
+      return;
     }
   };
   return (
@@ -120,8 +133,18 @@ const SignUp = () => {
         <button className="btn btn-dark w-100 py-2 mt-3" type="submit">
           Sign up
         </button>
-        {!terms && <p className="error-message">{message}</p>}
-        {error && <p className="error-message">{error}</p>}
+
+        {(errors || requestError) && (
+          <div>
+            <p classNasme="error-message">{requestError}</p>
+            <p classNasme="error-message">{errors.first_name}</p>
+            <p classNsame="error-message">{errors.last_name}</p>
+            <p classsName="error-message">{errors.email}</p>
+            <p classsName="error-message">{errors.terms}</p>
+            <p classsName="error-message">{errors.password}</p>
+            <p clsassName="error-message">{errors.password_confirmation}</p>
+          </div>
+        )}
       </div>
     </form>
   );

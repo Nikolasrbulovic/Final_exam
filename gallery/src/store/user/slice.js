@@ -18,7 +18,7 @@ const userSlice = createSlice({
       state.user = action.payload;
       state.error = null;
     },
-    userRegisterFailure: (state, action) => {
+    userRequestError: (state, action) => {
       state.user = null;
       state.error = action.payload;
     },
@@ -31,7 +31,7 @@ export const {
   performUserLogOut,
   performUserRegister,
   setUser,
-  userRegisterFailure,
+  userRequestError,
 } = userSlice.actions;
 
 export default userSlice.reducer;

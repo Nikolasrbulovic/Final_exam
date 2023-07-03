@@ -6,11 +6,12 @@ import {
   performUserLogin,
   performUserRegister,
   setUser,
-  userRegisterFailure,
+  userRequestError,
 } from "./slice";
 
 function* loginHandler(action) {
   try {
+    yield put(userRequestError(null));
     const { email, password, onSuccess } = action.payload;
     const { data } = yield call(userService.loginUser, email, password);
     onSuccess();
@@ -19,13 +20,20 @@ function* loginHandler(action) {
 
     yield put(setUser(userData));
   } catch (error) {
-    console.log(error);
+    yield put(userRequestError(error.response.data.message));
   }
 }
 function* registerHandler(action) {
   try {
-    const { first_name, last_name, email, password, password_confirmation } =
-      action.payload;
+    yield put(userRequestError(null));
+    const {
+      first_name,
+      last_name,
+      email,
+      password,
+      password_confirmation,
+      onSuccess,
+    } = action.payload;
     const { data } = yield call(
       userService.registerUser,
       first_name,
@@ -35,18 +43,22 @@ function* registerHandler(action) {
       password_confirmation
     );
     localStorage.setItem("access_token", data.authorisation.token);
+    if (onSuccess) {
+      onSuccess();
+    }
   } catch (error) {
-    yield put(userRegisterFailure(error.response.data.message));
+    yield put(userRequestError(error.response.data.message));
   }
 }
 
 function* logoutHandler() {
   try {
-    //yield call(userService.logoutUser);
+    yield put(userRequestError(null));
+
     localStorage.removeItem("access_token");
     yield put(setUser(null));
   } catch (error) {
-    console.log(error);
+    yield put(userRequestError(error.response.data.message));
   }
 }
 
