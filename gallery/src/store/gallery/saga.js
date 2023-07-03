@@ -57,11 +57,9 @@ function* createGallery(action) {
       description,
       image_urls
     );
-    console.log(data, "xx");
     yield put(setMyGalleries([data.gallery]));
     onSuccess();
   } catch (error) {
-    console.log(error.response.statusText);
     yield put(setGalleryError(error.response.statusText));
   }
 }
@@ -80,7 +78,6 @@ function* updateGallery(action) {
     yield put(updateMyGalleries(data));
     onSuccess();
   } catch (error) {
-    console.log(error.response.statusText);
     yield put(setGalleryError(error.response.statusText));
   }
 }
@@ -130,12 +127,10 @@ function* deleteGalleryById(action) {
 function* getUserGalleries(action) {
   try {
     yield put(setLoading(true));
-    console.log(action);
     const { data } = yield call(
       galleryService.getUserWithGalleries,
       action.payload
     );
-    console.log(data);
     if (action.payload?.shouldClearGalleries) {
       yield put(clearUserGalleries(data.data));
     }

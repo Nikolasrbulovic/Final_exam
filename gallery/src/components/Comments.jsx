@@ -9,11 +9,9 @@ import useLoggedUser from "../hooks/useLoggedUser";
 import Modal from "./Modal";
 
 const Comments = ({ gallery, galleryId }) => {
-  console.log(gallery);
   const dispatch = useDispatch();
   const [newComment, setNewComment] = useState("");
   const userId = useLoggedUser();
-  console.log(userId);
 
   const handleCommentChange = (event) => {
     setNewComment(event.target.value);

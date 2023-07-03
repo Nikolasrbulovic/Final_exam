@@ -7,7 +7,6 @@ const AuthRedirect = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
-    console.log(token);
     if (token) {
       setIsAuth(true);
     } else {

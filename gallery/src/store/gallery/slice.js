@@ -60,7 +60,6 @@ const gallerySlice = createSlice({
       state.error = action.payload;
     },
     setMyGalleries: (state, action) => {
-      console.log(action.payload, "yy");
       if (!state.myGalleries) {
         state.myGalleries = [...action.payload];
         return;
@@ -91,7 +90,6 @@ const gallerySlice = createSlice({
       state.userGalleries.push(...action.payload);
     },
     setComments: (state, action) => {
-      console.log(action);
       state.galleryById.comments.push(action.payload);
     },
     clearComment: (state, action) => {
@@ -99,7 +97,6 @@ const gallerySlice = createSlice({
       state.galleryById.comments = state.galleryById.comments.filter(
         (comment) => comment.id.toString() !== commentIdToRemove.toString()
       );
-      console.log(state.galleryById.comments);
     },
   },
 });

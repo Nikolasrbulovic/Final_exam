@@ -13,7 +13,6 @@ const CreateGallery = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const gallery = useSelector(selectGalleryById);
-  console.log(gallery);
   const error = useSelector(selectGalleryErrorMessage);
   const [urls, setUrls] = useState([""]);
   const [name, setName] = useState("");

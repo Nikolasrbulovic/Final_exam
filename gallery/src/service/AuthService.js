@@ -7,7 +7,6 @@ export const logoutUser = () => {
 export const userService = {
   loginUser: async (email, password) => {
     const data = await API.post("login", { email, password });
-    console.log(data);
     return data;
   },
   registerUser: async (
